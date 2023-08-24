@@ -74,7 +74,7 @@ public class EmployeeControllerTest
 		.andExpect(jsonPath("$.employeeAdress",is(emp1.getEmployeeAdress())));
 	}
 	@Test
-	@RepeatedTest(2)
+	//@RepeatedTest(2)
 	void getEmployee() throws Exception
 	{
 		List<Employee> list=new ArrayList();

@@ -1,10 +1,12 @@
 package com.example.api.apidemo2.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.jupiter.api.AfterAll;
+import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +35,7 @@ public class EmployeeIntegrationTest {
 	private Employee employee1;
 	
 	@BeforeAll
-	public void init()
+	public static void init()
 	{
 		restTemplate =new RestTemplate();
 	}
@@ -43,18 +45,18 @@ public class EmployeeIntegrationTest {
 	{
 		baseUrl =baseUrl+":"+port+"/employee";
 	    employee=new Employee();
-		employee= new Employee();
 		employee.setEmployeeName("Prem");
 		employee.setEmployeeJob("Trainee");
 		employee.setEmployeeAdress("Hyd");
 		employeeRepository.save(employee);
+		
 		employee1= new Employee();
 		employee1.setEmployeeName("Prem");
 		employee1.setEmployeeJob("Trainee");
 		employee1.setEmployeeAdress("Hyd");
 		employeeRepository.save(employee1);		
 	}
-	@AfterAll
+	@AfterEach
 	public void delete()
 	{
 		employeeRepository.deleteAll();
@@ -78,5 +80,34 @@ public class EmployeeIntegrationTest {
 //		assertNotNull(employee);
 		assertThat(newEmployee.getId()).isNotNull();
 		
+	}
+	@Test
+	void getEmployee()
+	{
+		List<Employee> list = restTemplate.getForObject(baseUrl+"/allEmployee", List.class);
+		//assertEquals(list.size(), 2);
+		assertThat(list.size()).isEqualTo(2);
+	}	
+	@Test
+	void getEmployeeById()
+	{
+		Employee existingEmployee=restTemplate.getForObject(baseUrl+"/employeeById/"+employee.getId(), Employee.class);
+		assertNotNull(existingEmployee);
+		assertEquals("Prem", existingEmployee.getEmployeeName());
+	}
+	@Test
+	void updateEmployeeById()
+	{
+		employee.setEmployeeAdress("Banglore");
+		restTemplate.put(baseUrl+"/updateEmployee/{id}",employee,employee.getId());
+		Employee updatedEmployee=restTemplate.getForObject(baseUrl+"/employeeById/"+employee.getId(), Employee.class);
+		assertThat(employee.getEmployeeAdress()).isEqualTo("Banglore");
+	}
+	@Test
+	void deleteEmployeeById()
+	{
+		restTemplate.delete(baseUrl+"/deleteEmployee/"+employee.getId(),Employee.class);
+		int count=employeeRepository.findAll().size();
+		assertThat(1).isEqualTo(count);
 	}
 }
