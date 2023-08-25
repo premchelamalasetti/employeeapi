@@ -77,7 +77,7 @@ public class EmployeeControllerTest
 	//@RepeatedTest(2)
 	void getEmployee() throws Exception
 	{
-		List<Employee> list=new ArrayList();
+		List<Employee> list=new ArrayList<>();
 		list.add(emp1);
 		list.add(emp2);
 		when(employeeService.getAllEmployee()).thenReturn(list);

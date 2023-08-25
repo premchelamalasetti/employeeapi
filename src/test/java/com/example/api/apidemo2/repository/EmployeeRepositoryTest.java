@@ -1,80 +1,78 @@
 package com.example.api.apidemo2.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.example.api.apidemo2.model.Employee;
 
 @DataJpaTest
+@AutoConfigureTestDatabase
 public class EmployeeRepositoryTest {
+	
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	
 	private Employee employee;
-	private Employee employee1;
-	
+	private Employee employee2;
 	@BeforeEach
 	void init()
 	{
-		employee= new Employee();
+		employee=new Employee();
+		employee.setId(1L);
 		employee.setEmployeeName("Prem");
 		employee.setEmployeeJob("Trainee");
-		employee.setEmployeeAdress("Hyd");
-		employeeRepository.save(employee);
+		employee.setEmployeeAdress("MTM");
+		employeeRepository.save(employee);	
 		
-		employee1= new Employee();
-		employee1.setEmployeeName("Prem");
-		employee1.setEmployeeJob("Trainee");
-		employee1.setEmployeeAdress("Hyd");
-		employeeRepository.save(employee1);
+		employee2=new Employee();
+		employee2.setId(2L);
+		employee2.setEmployeeName("Kumar");
+		employee2.setEmployeeJob("Associate");
+		employee2.setEmployeeAdress("Hyd");
+		employeeRepository.save(employee2);	
 	}
-
+	
 	@Test
-	void save()
+	void createEmployee()
 	{
 		Employee newEmployee=employeeRepository.save(employee);
-		assertThat(employee);
-		assertThat(newEmployee.getId()).isNotEqualTo(null);
+		assertThat(newEmployee);
+		assertThat(newEmployee.getId()).isNotNull();
 	}
+	
 	@Test
-	void allEmployee()
+	void returnAllEmployees()
 	{
 		List<Employee> list=employeeRepository.findAll();
-		assertNotNull(list);
-		assertThat(list.size()).isEqualTo(2);
-	}
-	@Test
-	void updateEmployee()
-	{
-		Employee newEmployee=employeeRepository.findById(employee.getId()).get();
-		employee.setEmployeeJob("AssociateEngineer");
-		Employee updatedEmployee=employeeRepository.save(newEmployee);
-		assertThat(employee.getEmployeeJob()).isEqualTo("AssociateEngineer");
-		
-	}
-	@Test
-	void deleteEmployee()
-	{
-		Long id=employee.getId();
-		employeeRepository.delete(employee);
-		Optional<Employee> emp=employeeRepository.findById(id);
-		List<Employee> list=employeeRepository.findAll();
-		assertThat(list.size()).isEqualTo(1);
+		assertThat(list.size()).isEqualTo(2L);
 	}
 	@Test
 	void getEmployeeById()
 	{
 		Employee existingEmployee=employeeRepository.findById(employee.getId()).get();
 		assertNotNull(existingEmployee);
-		assertEquals("Prem",existingEmployee.getEmployeeName());
+		assertThat(existingEmployee.getEmployeeAdress()).isEqualTo("MTM");
+	}
+	@Test
+	void updateEmployeeByID()
+	{
+		employee.setEmployeeJob("Associate Engineer");
+		Employee updatedEmployee=employeeRepository.save(employee);
+		assertThat(employee.getEmployeeAdress()).isEqualTo(updatedEmployee.getEmployeeAdress());
+	}
+	@Test
+	void deleteEmployeeById()
+	{
+		employeeRepository.deleteById(1L);
+		List<Employee> list=employeeRepository.findAll();
+		assertThat(list.size()).isEqualTo(1);
 	}
 }
