@@ -72,7 +72,7 @@ public class EmployeeRepositoryTest {
 	void deleteEmployeeById()
 	{
 		employeeRepository.deleteById(1L);
-		List<Employee> list=employeeRepository.findAll();
+		List<Employee> list = employeeRepository.findAll();
 		assertThat(list.size()).isEqualTo(1);
 	}
 }

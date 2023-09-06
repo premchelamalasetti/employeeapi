@@ -1,6 +1,7 @@
 package com.example.api.apidemo2.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -51,7 +52,7 @@ public class EmployeeServiceTest
 	void saveEmployee()
 	{
 		when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
-		Employee newEmployee=employeeRepository.save(employee);
+		Employee newEmployee=employeeService.create(employee);
 		assertNotNull(employee);
 		assertThat(newEmployee.getEmployeeName()).isEqualTo("Prem");
 	}
