@@ -3,30 +3,40 @@ plugins {
 	id 'org.springframework.boot' version '2.5.5'
 	id 'io.spring.dependency-management' version '1.1.2'
 
+
 }
 
 group = 'com.example.api.apidemo2'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_11
+	sourceCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
 	mavenCentral()
-	maven { url 'https://repo.spring.io/plugins-release' }
+	//maven { url 'https://repo.spring.io/plugins-release' }
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.palantir.gradle.docker:gradle-docker:0.35.0'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//classpath 'com.palantir.gradle.docker:gradle-docker: 0.35.0'
+
 	runtimeOnly 'com.h2database:h2'
 	//runtimeOnly 'com.mysql:mysql-connector-j'
 	//implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.1.0'
 }
-
+jar {
+	manifest {
+		attributes(
+				'Main-Class': 'com.example.api.apidemo2.ApiDemo2Application'
+		)
+	}
+}
 tasks.named('test') {
 	useJUnitPlatform()
 }
