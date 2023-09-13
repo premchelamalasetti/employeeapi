@@ -26,9 +26,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	//classpath 'com.palantir.gradle.docker:gradle-docker: 0.35.0'
 
-	runtimeOnly 'com.h2database:h2'
-	//runtimeOnly 'com.mysql:mysql-connector-j'
-	//implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.1.0'
+	//runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.1.0'
 }
 jar {
 	manifest {
