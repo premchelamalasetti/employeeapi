@@ -1,23 +1,24 @@
-version : "3"
+version: '3'
 services:
   userapi:
-    image : userapi
-    restart: always
-    build : .
+    image: usersapi
+    build: .
     ports:
-      - "8080:8080"
+      - "8881:8080"
     environment:
-      MYSQL_HOST: localhost
-      MYSQL_USER: root
-      MYSQL_PASSWORD: admin
-      MYSQL_PORT: 3307
-  mysqldb:
-    image: mysql
-    restart: always
+      - DATABASE_URL=jdbc:postgresql://postgres:5432/test
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=admin
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:latest
+    container_name: my-postgres
     ports:
-      - "3307:3307"
+      - "5435:5432"
     environment:
-      MYSQL_DATABASE: test
-      MYSQL_USERNAME: root
-      MYSQL_ROOT_PASSWORD: admin
+      POSTGRES_DB: test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+
 
